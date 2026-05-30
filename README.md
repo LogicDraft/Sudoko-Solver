@@ -1,3 +1,6 @@
+# 6×6 Sudoku Solver in C
+
+
 **Binary check:** Could hidden user memory that is not visible here materially change what I should say or recommend? **No.**
 
 A **6×6 Sudoku Solver** is a great project for learning:
@@ -47,7 +50,7 @@ Example grid:
 ---
 
 ## Basic C Program
-
+<!--
 ```c
 #include <stdio.h>
 
@@ -146,6 +149,7 @@ int main()
     return 0;
 }
 ```
+-->
 
 ### Concepts You'll Learn
 
