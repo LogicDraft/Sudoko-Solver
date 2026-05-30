@@ -15,9 +15,9 @@ bool isValidValue(int value)
     return value >= 0 && value <= 6;
 }
 
-int checkValidValue(int value, int r, int c) {
+int checkValidValue(int value) {
     if (!isValidValue(value)) {
-        printf("Invalid value at row %d, column %d. Use numbers from 0 to 6.\n", r + 1, c + 1);
+        printf("Invalid value. Use numbers from 0 to 6.\n");
         printf("\n");
         return 0;
     }
@@ -65,15 +65,16 @@ void input_sudoku()
                 repeat_input:
                 printf("Enter the value of sudoku[%d]: ",j+1);
                 if (scanf("%d",&temp) != 1) {
-                    printf("Invalid input. Please enter a number.\n");
+                    printf("Invalid input. Please enter a number.\n\n");
                     while(getchar() != '\n'); // Clear invalid input
                     goto repeat_input;
                 }
-                if (!checkValidValue(temp, i, j)) {
+                if (!checkValidValue(temp)) {
                     goto repeat_input;
                 }
                 sudoku[i][j] = temp;
             }
+            printf("\n");
         }
         
         printf("The sudoku is: \n");
