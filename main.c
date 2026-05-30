@@ -1,13 +1,14 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdbool.h>
+#define SIZE 6
 
-int row = 6;
-int col = 6;
+int row = SIZE;
+int col = SIZE;
 int box_row = 2;
 int box_col = 3;
 int EMPTY = 0;
-int sudoku[6][6] = {0};
+int sudoku[SIZE][SIZE] = {0};
 int i=0,j=0;
 
 bool isValidValue(int value) 
@@ -75,16 +76,73 @@ void input_sudoku()
                 sudoku[i][j] = temp;
             }
             printf("\n");
-        }
-        
-        printf("The sudoku is: \n");
-        printSeparator();
+        }  
+}
+
+
+
+int isSafe(int row, int col, int num)
+{
+    // Row check
+    for (int x = 0; x < SIZE; x++)
+        if (sudoku[row][x] == num)
+            return false;
     
+    // Column check
+    for (int x = 0; x < SIZE; x++)
+        if (sudoku[x][col] == num)
+            return false;
+
+    // Box check
+    int startRow = row - row % box_row;
+    int startCol = col - col % box_col;
+    for (int i = 0; i < box_row; i++)
+        for (int j = 0; j < box_col; j++)
+            if (sudoku[i + startRow][j + startCol] == num)
+                return false;
+
+    return true;
+}
+
+int SudokuSolver()
+{
+    for (int row = 0; row < SIZE; row++) 
+    {
+        for (int col = 0; col < SIZE; col++) 
+        {
+            if (sudoku[row][col] == EMPTY) 
+            {
+                for (int num = 1; num <= SIZE; num++) {
+
+                    if (isSafe(row, col, num)) 
+                    {
+                        sudoku[row][col] = num;
+                        if (SudokuSolver())
+                            return true;
+                        
+                        sudoku[row][col] = EMPTY; // Backtrack
+                    }
+                }
+                return false; // Trigger backtracking
+            }
+        }
+    }
+    // Sudoku solving logic will be implemented here
+    return 0;
+
 }
 
 int main()
 {
     printf("==== Sudoku Solver ====\n");
     input_sudoku();
+    printf("Initial Sudoku:\n");
+    printSeparator();
+    if (SudokuSolver()) {
+        printf("Sudoku solved successfully:\n");
+        printSeparator();
+    } else {
+        printf("No solution exists for the given Sudoku.\n");
+    }
     return 0;
 }

@@ -50,7 +50,7 @@ Example grid:
 ---
 
 ## Basic C Program
-<!--
+<!-
 ```c
 #include <stdio.h>
 
