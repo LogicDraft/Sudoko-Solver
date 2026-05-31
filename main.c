@@ -2,24 +2,48 @@
 #include<conio.h>
 #include<string.h>
 #include<stdbool.h>
-#define SIZE 9
+#define MAX_SIZE 9
 
-int row = SIZE;
-int col = SIZE;
-int box_row = 3;
-int box_col = 3;
+int row = MAX_SIZE;
+int col = MAX_SIZE;
+int box_row;
+int box_col;
 int EMPTY = 0;
-int sudoku[SIZE][SIZE] = {0};
+int sudoku[MAX_SIZE][MAX_SIZE] = {0};
 int i=0,j=0;
+int SIZE;
+
+void SizeOfBox()
+{
+    printf("Enter the size of Sudoku (6 or 9): ");
+    scanf("%d", &SIZE);
+    if(SIZE == 9)
+    {
+        box_row = 3;
+        box_col = 3;
+    }
+    else if(SIZE == 6)
+    {
+        row = 6;
+        col = 6;
+        box_row = 2;
+        box_col = 3;
+    }
+    else
+    {
+        printf("Invalid size. Please enter 6 or 9.\n");
+        SizeOfBox();
+    }
+}
 
 bool isValidValue(int value) 
 {
-    return value >= 0 && value <= 9;
+    return value >= 0 && value <= SIZE;
 }
 
 int checkValidValue(int value) {
     if (!isValidValue(value)) {
-        printf("Invalid value. Use numbers from 0 to 9.\n");
+        printf("Invalid value. Use numbers from 0 to %d.\n", SIZE);
         printf("\n");
         return 0;
     }
@@ -27,9 +51,17 @@ int checkValidValue(int value) {
     return 1;
 }
 
+void printline()
+{
+    if(SIZE == 9)
+        printf("+-------+-------+-------+\n");
+    else if(SIZE == 6)
+        printf("+-------+-------+\n");
+    
+}
 void printSeparator()
 {
-        printf("+-------+-------+\n");
+        printline();
         for(i=0;i<row;i++)
         {
             printf("|");
@@ -47,14 +79,14 @@ void printSeparator()
             printf("\n");
             
             if((i+1)%box_row==0)
-                printf("+-------+-------+\n");
+                printline();
         }
     } 
 
 
 void input_sudoku()
 {
-
+    SizeOfBox();
     printf("Enter the Sudoku values directly into the grid below.\n");
     printf("Use 0 for empty cells.\n");
     printSeparator();
