@@ -2,11 +2,11 @@
 #include<conio.h>
 #include<string.h>
 #include<stdbool.h>
-#define SIZE 6
+#define SIZE 9
 
 int row = SIZE;
 int col = SIZE;
-int box_row = 2;
+int box_row = 3;
 int box_col = 3;
 int EMPTY = 0;
 int sudoku[SIZE][SIZE] = {0};
@@ -14,12 +14,12 @@ int i=0,j=0;
 
 bool isValidValue(int value) 
 {
-    return value >= 0 && value <= 6;
+    return value >= 0 && value <= 9;
 }
 
 int checkValidValue(int value) {
     if (!isValidValue(value)) {
-        printf("Invalid value. Use numbers from 0 to 6.\n");
+        printf("Invalid value. Use numbers from 0 to 9.\n");
         printf("\n");
         return 0;
     }
@@ -107,10 +107,38 @@ int isSafe(int row, int col, int num)
 
 int SudokuSolver()
 {
-    
-    // Sudoku solving logic will be implemented here
-    return 0;
+    int row, col;
+    bool isEmpty = false;
+    for (row = 0; row < SIZE; row++) {
+        for (col = 0; col < SIZE; col++) {
+            if (sudoku[row][col] == EMPTY) {
+                isEmpty = true;
+                break;
+            }
+        }
+        if (isEmpty) {
+            break;
+        }
+    }
 
+    // No empty space left, puzzle solved
+    if (!isEmpty) {
+        return true;
+    }
+
+    for (int num = 1; num <= SIZE; num++) {
+        if (isSafe(row, col, num)) {
+            sudoku[row][col] = num;
+
+            if (SudokuSolver()) {
+                return true;
+            }
+
+            sudoku[row][col] = EMPTY; // Backtrack
+        }
+    }
+
+    return false; // Trigger backtracking
 }
 
 int main()
