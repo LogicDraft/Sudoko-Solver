@@ -160,3 +160,7 @@ int main()
 * **Nested Loops** → Row and column traversal
 
 This project is often considered one of the best beginner-to-intermediate C projects for understanding recursion and backtracking.
+
+## Developer
+- Kruthik B T
+- Gowtham Gowda C B
