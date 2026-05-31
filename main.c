@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<conio.h>
 #include<string.h>
 #include<stdbool.h>
 #define SIZE 6
@@ -106,27 +107,7 @@ int isSafe(int row, int col, int num)
 
 int SudokuSolver()
 {
-    for (int row = 0; row < SIZE; row++) 
-    {
-        for (int col = 0; col < SIZE; col++) 
-        {
-            if (sudoku[row][col] == EMPTY) 
-            {
-                for (int num = 1; num <= SIZE; num++) {
-
-                    if (isSafe(row, col, num)) 
-                    {
-                        sudoku[row][col] = num;
-                        if (SudokuSolver())
-                            return true;
-                        
-                        sudoku[row][col] = EMPTY; // Backtrack
-                    }
-                }
-                return false; // Trigger backtracking
-            }
-        }
-    }
+    
     // Sudoku solving logic will be implemented here
     return 0;
 
@@ -144,5 +125,5 @@ int main()
     } else {
         printf("No solution exists for the given Sudoku.\n");
     }
-    return 0;
+    getche();
 }
