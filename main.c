@@ -274,6 +274,7 @@ int main()                                        // Main function to run the Su
                     resetGrid();
                     puzzleLoaded = false;
                     puzzleSolved = false;
+                    backtrackingSteps = 0;
                 }
                 break;
 
