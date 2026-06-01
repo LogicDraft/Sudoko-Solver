@@ -225,7 +225,6 @@ int main()                                        // Main function to run the Su
             case 2:
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
-                    printSeparator();
                 }
                 else {
                     printf("\nCurrent Sudoku Grid:\n");
