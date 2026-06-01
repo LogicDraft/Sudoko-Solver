@@ -226,8 +226,12 @@ int main()                                        // Main function to run the Su
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
                     printSeparator();
-                    break;
                 }
+                else {
+                    printf("\nCurrent Sudoku Grid:\n");
+                    printSeparator();
+                }
+                break;
 
             case 3:
 
@@ -235,13 +239,13 @@ int main()                                        // Main function to run the Su
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
                     break;
                 }
-                if (puzzleSolved) {
+                if (puzzleSolved==true) {
                     printSeparator();
                     printf("The Sudoku puzzle is already solved.\n");
                     break;
                 }
 
-                if (SudokuSolver()) {
+                if (SudokuSolver() == true) {
                     printf("\nSudoku solved successfully:\n");
                     printf("Backtracking steps taken: %ld\n", backtrackingSteps);
                     printSeparator();
