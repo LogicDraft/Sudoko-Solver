@@ -78,33 +78,16 @@ After solving, the number of **backtracking steps** taken is displayed.
 
 ---
 
-## 🛠️ Getting Started
 
-### Prerequisites
-
-> ⚠️ This program uses `<conio.h>` (`getche`), which is **Windows-specific**.
-> Compile using **MinGW (GCC)**, **TurboC**, or **Code::Blocks on Windows**.
-
-### Compile
-
-```bash
-gcc sudoku_solver.c -o sudoku_solver
-```
-
-### Run
-
-```bash
-./sudoku_solver
-```
-
----
 
 ## 📁 Project Structure
 
 ```
 sudoku-solver/
 │
-└── sudoku_solver.c      # Single-file implementation
+|-- README.md              # Project overview and instructions
+|-- main-101.c             # Main program with initialization build
+└── Improve-Main.c        # Improvement of main-101.c 
 ```
 
 ---
