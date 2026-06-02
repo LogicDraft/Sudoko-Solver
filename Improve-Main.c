@@ -362,6 +362,7 @@ int main()                                        // Main function to run the Su
                     printf("2. Medium Puzzle\n");
                     printf("3. Hard Puzzle\n");
                     printf("Enter choice: ");
+                    
                     int puzzleChoice;
                     if (scanf("%d", &puzzleChoice) != 1) {
                         printf("\nInvalid input. Please enter a number.\n");
@@ -369,7 +370,7 @@ int main()                                        // Main function to run the Su
                         continue;
                     }
                     if (puzzleChoice < 1 || puzzleChoice > 3) {
-                        printf("Invalid choice. Please enter a number between 1 and 3.\n");
+                        printf("\nInvalid choice. Please enter a number between 1 and 3.\n");
                         continue;
                     }
                     loadTestPuzzle(puzzleChoice - 1);
@@ -402,8 +403,7 @@ int main()                                        // Main function to run the Su
                     backtrackingsteps = 0;
                 }
                 break;
-            
-
+    
             case 6:
                 exit(0);
 
