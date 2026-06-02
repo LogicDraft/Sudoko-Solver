@@ -14,7 +14,7 @@ int SIZE;
 int sudoku[MAX_SIZE][MAX_SIZE] = {0};
 bool puzzleLoaded = false;
 bool puzzleSolved = false;
-long backtrackingSteps = 0;
+long backtrackingsteps = 0;
 
 void SizeOfBox()                // Function to determine the size of the Sudoku grid and the corresponding box dimensions
 {
@@ -174,7 +174,7 @@ int SudokuSolver()                                   // Backtracking algorithm t
             }
 
             sudoku[row][col] = EMPTY; // Backtrack
-            backtrackingSteps++;
+            backtrackingsteps++;
         }
     }
 
@@ -245,7 +245,7 @@ int main()                                        // Main function to run the Su
 
                 if (SudokuSolver() == true) {
                     printf("\nSudoku solved successfully:\n");
-                    printf("Backtracking steps taken: %ld\n", backtrackingSteps);
+                    printf("Backtracking steps taken: %ld\n", backtrackingsteps);
                     printSeparator();
                     puzzleSolved = true;
                 } else {
@@ -272,7 +272,7 @@ int main()                                        // Main function to run the Su
                     resetGrid();
                     puzzleLoaded = false;
                     puzzleSolved = false;
-                    backtrackingSteps = 0;
+                    backtrackingsteps = 0;
                 }
                 break;
 
