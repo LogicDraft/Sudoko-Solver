@@ -16,13 +16,13 @@ bool puzzleLoaded = false;
 bool puzzleSolved = false;
 long backtrackingsteps = 0;
 
-void SizeOfBox()                // Function to determine the size of the Sudoku grid and the corresponding box dimensions
+void SizeofBox()                // Function to determine the size of the Sudoku grid and the corresponding box dimensions
 {
     printf("\nEnter the size of Sudoku (6 or 9): ");
     if (scanf("%d", &SIZE) != 1) {
         printf("Invalid input. Please enter a number.\n");
         while(getchar() != '\n');
-        SizeOfBox();
+        SizeofBox();
     }
     if (SIZE == 9)
     {
@@ -38,7 +38,7 @@ void SizeOfBox()                // Function to determine the size of the Sudoku 
     }
     else {
         printf("Invalid size. Please enter 6 or 9.\n");
-        SizeOfBox();
+        SizeofBox();
     }
 }
 
@@ -93,7 +93,7 @@ void printSeparator()                          // Function to print the Sudoku g
 
 void input_sudoku()                                    // Function to input the Sudoku puzzle from the user
 {
-    SizeOfBox();
+    SizeofBox();
     printf("Enter the Sudoku values directly into the grid below.\n");
     printf("Use 0 for empty cells.\n");
     printSeparator();
@@ -190,6 +190,88 @@ void resetGrid() {                                  // Reset the Sudoku grid to 
     }
 }
 
+
+
+void loadTestPuzzle(int num) 
+{                           // Function to test the Sudoku solver with a predefined puzzle
+    int temp = (SIZE == 6) ? 0 : 1; // Determine index for 6x6 or 9x9 puzzles
+    int testPuzzle[2][3][9][9] = {
+        {
+            {
+                // Easy Sudoku Puzzle
+                {5, 3, 0, 0, 7, 0, 0, 0, 0},
+                {6, 0, 0, 1, 9, 5, 0, 0, 0},
+                {0, 9, 8, 0, 0, 0, 0, 6, 0},
+                {8 ,0 ,0 ,0 ,6 ,0 ,0 ,0 ,3},
+                {4 ,0 ,0 ,8 ,0 ,3 ,0 ,0 ,1},
+                {7 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,6},
+                {0 ,6 ,0 ,0 ,0 ,0 ,2 ,8 ,0},
+                {0 ,0 ,0 ,4 ,1 ,9 ,0 ,0 ,5},
+                {0 ,0 ,0 ,0 ,8 ,0 ,0 ,7 ,9}
+            },
+            {
+                // Medium Sudoku Puzzle
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 3, 0, 8, 5},
+                {0, 0, 1, 0, 2, 0, 0, 0, 0},
+                {0 ,0 ,0 ,5 ,0 ,7 ,0 ,0 ,0},
+                {0 ,0 ,4 ,0 ,0 ,0 ,1 ,0 ,0},
+                {0 ,9 ,0 ,6 ,0 ,8 ,0 ,4 ,0},
+                {5 ,0 ,0 ,2 ,0 ,6 ,3 ,0 ,0},
+                {6 ,7 ,2 ,8 ,0 ,4 ,0 ,0 ,0},
+                {1 ,4 ,9 ,7 ,0 ,5 ,0 ,0 ,0}
+            },
+            {
+                // Hard Sudoku Puzzle
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 3, 0, 8, 5},
+                {0, 0, 1, 0, 2, 0, 0, 0, 0},
+                {0 ,0 ,0 ,5 ,0 ,7 ,0 ,0 ,0},
+                {0 ,0 ,4 ,0 ,0 ,0 ,1 ,0 ,0},
+                {0 ,9 ,0 ,6 ,0 ,8 ,0 ,4 ,0},
+                {5 ,0 ,0 ,2 ,0 ,6 ,3 ,0 ,0},
+                {6 ,7 ,2 ,8 ,0 ,4 ,0 ,0 ,1},
+                {1 ,4 ,9 ,7 ,0 ,5 ,0 ,0 ,9}
+            }
+        },
+        {
+            {
+                // Easy 6x6 Sudoku Puzzle
+                {0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 3},
+                {0, 0, 1, 0, 2, 0},
+                {0 ,0 ,0 ,5 ,0 ,7},
+                {0 ,0 ,4 ,0 ,0 ,0},
+                {0 ,9 ,0 ,6 ,0 ,8}
+            },
+            {
+                // Medium 6x6 Sudoku Puzzle
+                {0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 3},
+                {0, 0, 1, 0, 2, 0},
+                {0 ,0 ,0 ,5 ,0 ,7},
+                {0 ,0 ,4 ,0 ,0 ,0},
+                {0 ,9 ,0 ,6 ,0 ,8}
+            },
+            {
+                // Hard 6x6 Sudoku Puzzle
+                {1, 0, 0, 4, 8, 9},
+                {7, 3, 0, 0, 0, 0},
+                {9, 5, 4, 6, 1, 2},
+                {8 ,2 ,6 ,3 ,5 ,7},
+                {3 ,9 ,1 ,7 ,2 ,8},
+                {5 ,4 ,7 ,8 ,6 ,4}
+            }
+        }
+    };
+    // Copy the selected puzzle to the global sudoku grid
+    for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 9; c++) {
+            sudoku[r][c] = testPuzzle[temp][num][r][c];
+        }
+    }
+}
+
 int main()                                        // Main function to run the Sudoku solver
 {
     int choice;
@@ -199,8 +281,9 @@ int main()                                        // Main function to run the Su
         printf("1. Enter Sudoku Puzzle\n");
         printf("2. Display Sudoku\n");
         printf("3. Solve Sudoku\n");
-        printf("4. Reset Grid\n");
-        printf("5. Exit\n");
+        printf("4. Test Puzzles\n");
+        printf("5. Reset Grid\n");
+        printf("6. Exit\n");
         printf("\nEnter Choice: ");
 
         if (scanf("%d",&choice) != 1) {
@@ -208,8 +291,8 @@ int main()                                        // Main function to run the Su
             while(getchar() != '\n'); // Clear invalid input
             continue;
         }
-        if (choice < 1 || choice > 5) {
-            printf("Invalid choice. Please enter a number between 1 and 5.\n");
+        if (choice < 1 || choice > 6) {
+            printf("Invalid choice. Please enter a number between 1 and 6.\n");
             continue;
         }
 
@@ -252,8 +335,52 @@ int main()                                        // Main function to run the Su
                     printf("\nNo solution exists for the given Sudoku.\n");
                 }
                 break;
-            
+
             case 4:
+                if (puzzleLoaded == true) {
+                    printf("Are you sure you want to load a test puzzle? This will overwrite the current grid. (y/n): ");
+                    char confirm;
+                    scanf(" %c", &confirm);
+                    if (confirm != 'y' && confirm != 'Y') {
+                        printf("Loading test puzzle cancelled.\n");
+                        break;
+                    }
+                }
+
+                if (puzzleLoaded == true) {
+                    printf("Resetting the current grid before loading a test puzzle...\n");
+                    resetGrid();
+                    puzzleLoaded = false;
+                    puzzleSolved = false;
+                    backtrackingsteps = 0;
+                }
+                SizeofBox();
+                while (1)
+                {
+                    printf("\nSelect a test puzzle:\n");
+                    printf("1. Easy Puzzle\n");
+                    printf("2. Medium Puzzle\n");
+                    printf("3. Hard Puzzle\n");
+                    printf("Enter choice: ");
+                    int puzzleChoice;
+                    if (scanf("%d", &puzzleChoice) != 1) {
+                        printf("\nInvalid input. Please enter a number.\n");
+                        while(getchar() != '\n'); // Clear invalid input
+                        continue;
+                    }
+                    if (puzzleChoice < 1 || puzzleChoice > 3) {
+                        printf("Invalid choice. Please enter a number between 1 and 3.\n");
+                        continue;
+                    }
+                    loadTestPuzzle(puzzleChoice - 1);
+                    printSeparator();
+                    printf("Test puzzle loaded successfully.\n");
+                    puzzleLoaded = true;
+                    break;
+                }
+                break;
+            
+            case 5:
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is already empty.\n");
                     break;
@@ -275,8 +402,9 @@ int main()                                        // Main function to run the Su
                     backtrackingsteps = 0;
                 }
                 break;
+            
 
-            case 5:
+            case 6:
                 exit(0);
 
             default:
