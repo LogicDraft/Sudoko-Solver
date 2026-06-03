@@ -85,9 +85,10 @@ After solving, the number of **backtracking steps** taken is displayed.
 ```
 sudoku-solver/
 │
-|-- README.md              # Project overview and instructions
-|-- main-101.c             # Main program with initialization build
-└── Improve-Main.c        # Improvement of main-101.c 
+|-- README.md                 # Project overview and instructions
+|-- main-101.c                # Main program with initialization build
+|-- Sudoku_Solver_Main.c      # Improvement of main-101.c
+└── Improve_Sudoku_Solver.c   # Improved version with full features and menu 
 ```
 
 ---
