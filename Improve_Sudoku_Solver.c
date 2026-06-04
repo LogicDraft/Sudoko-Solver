@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<windows.h>
 #include<stdbool.h>
 
 #define MAX_SIZE 9
@@ -20,29 +21,36 @@ struct
     int backtrackingSteps;
 } sudoku = {MAX_SIZE, MAX_SIZE, 0, 0, 0, {{0}}, false, false, 0};
 
-void SizeofBox()                // Function to determine the size of the Sudoku grid and the corresponding box dimensions
+void SizeofBox()        // Function to determine the size of the Sudoku grid and box dimensions based on user input
 {
-    printf("\033[34m\nEnter the size of Sudoku (6 or 9): \033[0m");
-    if (scanf("%d", &sudoku.SIZE) != 1) {
-        printf("\033[31mInvalid input. Please enter a number.\033[0m\n");
-        while(getchar() != '\n');
-        SizeofBox();
-    }
-    if (sudoku.SIZE == 9)          // Standard 9x9 Sudoku
+    while (1)
     {
-        sudoku.box_col = 3;
-        sudoku.box_row = 3;
-    }
-    else if (sudoku.SIZE == 6)       // 6x6 Sudoku with 2x3 boxes
-    {
-        sudoku.row = 6;
-        sudoku.col = 6;
-        sudoku.box_row = 2;
-        sudoku.box_col = 3;
-    }
-    else {
+        printf("\033[92m\nEnter Sudoku Size (6 or 9): \033[0m");
+
+        if (scanf("%d", &sudoku.SIZE) != 1)
+        {
+            printf("\033[31mInvalid input. Please enter a number.\033[0m\n");
+            while(getchar() != '\n');
+            continue;
+        }
+
+        if (sudoku.SIZE == 9)
+        {
+            sudoku.row = 9;
+            sudoku.col = 9;
+            sudoku.box_row = 3;
+            sudoku.box_col = 3;
+            break;
+        }
+        else if (sudoku.SIZE == 6)
+        {
+            sudoku.row = 6;
+            sudoku.col = 6;
+            sudoku.box_row = 2;
+            sudoku.box_col = 3;
+            break;
+        }
         printf("\033[31mInvalid size. Please enter 6 or 9.\033[0m\n");
-        SizeofBox();
     }
 }
 
@@ -61,7 +69,7 @@ int checkValidValue(int value)                     // Function to check if the i
     return 1;
 }
 
-bool validatePuzzle()
+bool validatePuzzle()       // Function to validate the initial Sudoku puzzle before attempting to solve it
 {
     for (int r = 0; r < sudoku.row; r++) {
         for (int c = 0; c < sudoku.col; c++) {
@@ -83,9 +91,9 @@ bool validatePuzzle()
 void printline()                                // Function to print the separator line 
 {
     if (sudoku.SIZE == 9)
-        printf("+-------+-------+-------+\n");
+        printf("\033[94m+-------+-------+-------+\033[0m\n");
     else if (sudoku.SIZE == 6)
-        printf("+-------+-------+\n");
+        printf("\033[94m+-------+-------+\033[0m\n");
 }
 
 void printSeparator()                          // Function to print the Sudoku grid
@@ -93,19 +101,21 @@ void printSeparator()                          // Function to print the Sudoku g
     printline();
     for (int r = 0; r < sudoku.row; r++) 
     {
-        printf("|");
+        printf("\033[94m");
+        printf("\033[95m|\033[0m");
         for (int c = 0; c < sudoku.col; c++) 
         {
             if (sudoku.Sudoku[r][c] == EMPTY) {
-                printf(" .");
+                printf("\033[95m .\033[0m");
             } 
             else {
-                printf(" %d", sudoku.Sudoku[r][c]);
+                printf("\033[95m %d\033[0m", sudoku.Sudoku[r][c]);
             }
             if ((c + 1) % sudoku.box_col == 0)
-                printf(" |");
+                printf(" \033[95m|\033[0m");
         }
             printf("\n");
+        printf("\033[0m");
 
         if ((r + 1) % sudoku.box_row == 0)
             printline();
@@ -117,15 +127,15 @@ void printSeparator()                          // Function to print the Sudoku g
 void input_sudoku()                                    // Function to input the Sudoku puzzle from the user
 {
     SizeofBox();
-    printf("\033[34mEnter the Sudoku values directly into the grid below.\033[0m\n");
-    printf("\033[34mUse 0 for empty cells.\033[0m\n");
+    printf("\033[92mEnter the Sudoku values directly into the grid below.\033[0m\n");
+    printf("\033[92mUse 0 for empty cells.\033[0m\n");
     printSeparator();
     int temp;
     for (int r = 0; r < sudoku.row; r++) {
-        printf("\033[34mRow : %d \033[0m\n", r + 1);
+        printf("\033[91mRow : %d \033[0m\n", r + 1);
         for (int c = 0; c < sudoku.col; c++) {
             while (1) {
-                printf("\033[34mEnter the value of sudoku[%d]: \033[0m", c + 1);
+                printf("\033[92mEnter the value of sudoku[%d]: \033[0m", c + 1);
                 if (scanf("%d", &temp) != 1) {
                     printf("\033[31mInvalid input. Please enter a number.\033[0m\n\n");
                     while (getchar() != '\n');
@@ -221,69 +231,69 @@ void loadTestPuzzle(int num)
     int testPuzzle[2][3][9][9] = {
         {
             {
-                // Easy Sudoku Puzzle
+                // Easy 9x9 Sudoku Puzzle
                 {5, 3, 0, 0, 7, 0, 0, 0, 0},
                 {6, 0, 0, 1, 9, 5, 0, 0, 0},
                 {0, 9, 8, 0, 0, 0, 0, 6, 0},
-                {8 ,0 ,0 ,0 ,6 ,0 ,0 ,0 ,3},
-                {4 ,0 ,0 ,8 ,0 ,3 ,0 ,0 ,1},
-                {7 ,0 ,0 ,0 ,2 ,0 ,0 ,0 ,6},
+                {8, 0, 0, 0, 6, 0, 0, 0, 3},
+                {4, 0, 0, 8, 0, 3, 0, 0, 1},
+                {7, 0, 0, 0, 2, 0, 0, 0, 6},
                 {0 ,6 ,0 ,0 ,0 ,0 ,2 ,8 ,0},
                 {0 ,0 ,0 ,4 ,1 ,9 ,0 ,0 ,5},
                 {0 ,0 ,0 ,0 ,8 ,0 ,0 ,7 ,9}
             },
             {
-                // Medium Sudoku Puzzle
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 3, 0, 8, 5},
-                {0, 0, 1, 0, 2, 0, 0, 0, 0},
-                {0 ,0 ,0 ,5 ,0 ,7 ,0 ,0 ,0},
-                {0 ,0 ,4 ,0 ,0 ,0 ,1 ,0 ,0},
-                {0 ,9 ,0 ,6 ,0 ,8 ,0 ,4 ,0},
-                {5 ,0 ,0 ,2 ,0 ,6 ,3 ,0 ,0},
-                {6 ,7 ,2 ,8 ,0 ,4 ,0 ,0 ,0},
-                {1 ,4 ,9 ,7 ,0 ,5 ,0 ,0 ,0}
+                // Medium 9x9 Sudoku Puzzle
+                {0, 0, 0, 2, 6, 0, 7, 0, 1},
+                {6, 8, 0, 0, 7, 0, 0, 9, 0},
+                {1, 9, 0, 0, 0, 4, 5, 0, 0},
+                {8 ,2 ,0 ,1 ,0 ,0 ,0 ,4 ,0},
+                {0 ,0 ,4 ,6 ,0 ,2 ,9 ,0 ,0},
+                {0 ,5 ,0 ,0 ,0 ,3 ,0 ,2 ,8},
+                {0 ,0 ,9 ,3 ,0 ,0 ,0 ,7 ,4},
+                {0 ,4 ,0 ,0 ,5 ,0 ,0 ,3 ,6},
+                {7 ,0 ,3 ,0 ,1 ,8 ,0 ,0 ,0}
             },
             {
-                // Hard Sudoku Puzzle
-                {0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 3, 0, 8, 5},
-                {0, 0, 1, 0, 2, 0, 0, 0, 0},
-                {0 ,0 ,0 ,5 ,0 ,7 ,0 ,0 ,0},
-                {0 ,0 ,4 ,0 ,0 ,0 ,1 ,0 ,0},
-                {0 ,9 ,0 ,6 ,0 ,8 ,0 ,4 ,0},
-                {5 ,0 ,0 ,2 ,0 ,6 ,3 ,0 ,0},
-                {6 ,7 ,2 ,8 ,0 ,4 ,0 ,0 ,1},
-                {1 ,4 ,9 ,7 ,0 ,5 ,0 ,0 ,9}
+                // Hard 9x9 Sudoku Puzzle
+                {0, 0, 0, 0, 0, 0, 0, 1, 2},
+                {0, 0, 0, 0, 0, 0, 7, 0, 0},
+                {5, 0, 0, 0, 0, 0, 0, 0, 8},
+                {0 ,6 ,0 ,0 ,7 ,5 ,0 ,0 ,0},
+                {0 ,9 ,1 ,8 ,4 ,6 ,5 ,3 ,0},
+                {0 ,0 ,0 ,9 ,2 ,0 ,0 ,4 ,0},
+                {7 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,5},
+                {0 ,0 ,8 ,0 ,0 ,0 ,0 ,0 ,0},
+                {9 ,2 ,0 ,0 ,0 ,0 ,0 ,0 ,0}
             }
         },
         {
             {
                 // Easy 6x6 Sudoku Puzzle
-                {0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 3},
-                {0, 0, 1, 0, 2, 0},
-                {0 ,0 ,0 ,5 ,0 ,7},
-                {0 ,0 ,4 ,0 ,0 ,0},
-                {0 ,9 ,0 ,6 ,0 ,8}
+                {0, 0, 0, 0, 5, 6},
+                {0, 0, 0, 1, 0, 0},
+                {0, 1, 0, 0, 0, 0},
+                {0, 0, 0, 0, 2, 0},
+                {0, 0, 3, 0, 0, 0},
+                {4, 5, 0, 0, 0, 0}
             },
             {
                 // Medium 6x6 Sudoku Puzzle
-                {0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 3},
-                {0, 0, 1, 0, 2, 0},
-                {0 ,0 ,0 ,5 ,0 ,7},
-                {0 ,0 ,4 ,0 ,0 ,0},
-                {0 ,9 ,0 ,6 ,0 ,8}
+                {1, 0, 3, 4, 6, 5},
+                {4, 5, 6, 1, 3, 2},
+                {5, 6, 4, 2, 1, 3},
+                {3 ,4 ,5 ,6 ,2 ,1},
+                {6 ,1 ,2 ,5 ,4 ,3},
+                {2 ,3 ,1 ,7 ,5 ,4}
             },
             {
                 // Hard 6x6 Sudoku Puzzle
-                {1, 0, 0, 4, 8, 9},
-                {7, 3, 0, 0, 0, 0},
-                {9, 5, 4, 6, 1, 2},
-                {8 ,2 ,6 ,3 ,5 ,7},
-                {3 ,9 ,1 ,7 ,2 ,8},
-                {5 ,4 ,7 ,8 ,6 ,4}
+                {1, 2, 3, 4, 5, 6},
+                {4, 5, 6, 1, 2, 3},
+                {5, 6, 4, 2, 3, 1},
+                {3 ,4 ,5 ,6 ,1 ,2},
+                {6 ,1 ,2 ,5 ,4 ,3},
+                {2 ,3 ,1 ,7 ,6 ,4}
             }
         }
     };
@@ -295,7 +305,20 @@ void loadTestPuzzle(int num)
     }
 }
 
-void printlines(int num)
+void progressBar()          // Function to display a progress bar while solving the Sudoku puzzle
+{
+    printf("\nSolving Sudoku...\n[");
+
+    for(int i = 0; i <= 10; i++)
+    {
+        printf("\033[31m#\033[0m");
+        Sleep(100);
+    }
+
+    printf("] 100%%\n");
+}
+
+void printlines(int num)        // Function to print a specified number of separator lines for better readability
 {
     printf("\n");
     for (int j = 0; j < num; j++) {
@@ -303,7 +326,8 @@ void printlines(int num)
     }
     printf("\n");
 }
-enum MenuOption
+
+enum MenuOption     // Enum to represent the menu options in the Sudoku solver
 {
     INPUT_SUDOKU = 1,
     DISPLAY_SUDOKU,
@@ -318,15 +342,23 @@ int main()                                        // Main function to run the Su
 {
     int choice;
 
-    while (1) {
-        printf("\033[33m\n===== SUDOKU SOLVER =====\n\n\033[0m");
-        printf("\033[32m1. Enter Sudoku Puzzle\033[0m\n");
-        printf("\033[32m2. Display Sudoku\033[0m\n");
-        printf("\033[32m3. Solve Sudoku\033[0m\n");
-        printf("\033[32m4. Test Puzzles\033[0m\n");
-        printf("\033[32m5. Reset Grid\033[0m\n");
-        printf("\033[32m6. Exit\033[0m\n");
-        printf("\033[34m\nEnter Choice: \033[0m");
+    while (1) {                         // Main loop to display the menu and handle user input
+        printf("\033[33m");
+        printf("|-------------------------------------|\n");
+        printf("|          SUDOKU SOLVER              |\n");
+        printf("|-------------------------------------|\n");
+        printf("| Size      : %-24d|\n", sudoku.SIZE);
+        printf("| Loaded    : %-24s|\n", sudoku.puzzleLoaded ? "YES" : "NO");
+        printf("| Solved    : %-24s|\n", sudoku.puzzleSolved ? "YES" : "NO");
+        printf("|-------------------------------------|\n");
+        printf("| 1. Enter Sudoku Puzzle              |\n");
+        printf("| 2. Display Sudoku                   |\n");
+        printf("| 3. Solve Sudoku                     |\n");
+        printf("| 4. Test Puzzles                     |\n");
+        printf("| 5. Reset Grid                       |\n");
+        printf("| 6. Exit                             |\n");
+        printf("|-------------------------------------|\n");
+        printf("\033[92mEnter Choice: \033[0m");
 
         if (scanf("%d",&choice) != 1) {
             printf("\033[31mInvalid input. Please enter a number.\033[0m\n\n");
@@ -346,13 +378,13 @@ int main()                                        // Main function to run the Su
                     char confirm;
                     scanf(" %c", &confirm);
                     if (confirm != 'y' && confirm != 'Y') {
-                        resetGrid();
-                        sudoku.puzzleLoaded = false;
                         printf("\033[31mOverwriting cancelled.\033[0m\n");
-                        break;
                     }
+                    resetGrid();
+                    sudoku.puzzleLoaded = false;
+                    printf("\033[31mCurrent grid reset. You can now enter a new puzzle.\033[0m\n");
                 }
-                printf("\033[34m\n\nInput Sudoku Puzzle:\033[0m");
+                printf("\033[92m\n\nInput Sudoku Puzzle:\033[0m");
                 input_sudoku();
                 sudoku.puzzleLoaded = true;
                 break;
@@ -386,6 +418,7 @@ int main()                                        // Main function to run the Su
                 }
 
                 if (SudokuSolver() == true) {
+                    progressBar();
                     printf("\nSudoku solved successfully:\n");
                     printf("Backtracking steps taken: %d\n", sudoku.backtrackingSteps);
                     printSeparator();
@@ -397,7 +430,7 @@ int main()                                        // Main function to run the Su
 
             case TEST_PUZZLES:
                 if (sudoku.puzzleLoaded == true) {
-                    printf("\033[31mAre you sure you want to load a test puzzle? This will overwrite the current grid. (y/n): \033[0m");
+                    printf("\033[92mAre you sure you want to load a test puzzle? This will overwrite the current grid. (y/n): \033[0m");
                     char confirm;
                     scanf(" %c", &confirm);
                     if (confirm != 'y' && confirm != 'Y') {
@@ -423,7 +456,7 @@ int main()                                        // Main function to run the Su
                     printf("\033[32m1. Easy Puzzle\033[0m\n");
                     printf("\033[32m2. Medium Puzzle\033[0m\n");
                     printf("\033[32m3. Hard Puzzle\033[0m\n");
-                    printf("\033[34mEnter choice: \033[0m");
+                    printf("\033[92mEnter choice: \033[0m");
                     
                     int puzzleChoice;
                     if (scanf("%d", &puzzleChoice) != 1) {
@@ -450,7 +483,7 @@ int main()                                        // Main function to run the Su
                 }
                 else {
                     if (sudoku.puzzleLoaded == true) {
-                         printf("\033[31mAre you sure you want to reset the grid? (y/n): \033[0m");
+                         printf("\033[92mAre you sure you want to reset the grid? (y/n): \033[0m");
                          char confirm;
                          scanf(" %c", &confirm);
                          if (confirm != 'y' && confirm != 'Y') {
