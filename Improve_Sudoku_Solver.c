@@ -7,34 +7,38 @@
 #define MAX_SIZE 9
 #define EMPTY 0
 
-int row = MAX_SIZE;
-int col = MAX_SIZE;
-int box_row, box_col;
-int SIZE;
-int sudoku[MAX_SIZE][MAX_SIZE] = {0};
-bool puzzleLoaded = false;
-bool puzzleSolved = false;
-long backtrackingsteps = 0;
+struct
+{
+    int row;
+    int col;
+    int SIZE;
+    int box_row;
+    int box_col;
+    int Sudoku[MAX_SIZE][MAX_SIZE];
+    bool puzzleLoaded;
+    bool puzzleSolved;
+    int backtrackingSteps;
+} sudoku = {MAX_SIZE, MAX_SIZE, 0, 0, 0, {{0}}, false, false, 0};
 
 void SizeofBox()                // Function to determine the size of the Sudoku grid and the corresponding box dimensions
 {
     printf("\nEnter the size of Sudoku (6 or 9): ");
-    if (scanf("%d", &SIZE) != 1) {
+    if (scanf("%d", &sudoku.SIZE) != 1) {
         printf("Invalid input. Please enter a number.\n");
         while(getchar() != '\n');
         SizeofBox();
     }
-    if (SIZE == 9)
+    if (sudoku.SIZE == 9)          // Standard 9x9 Sudoku
     {
-        box_row = 3;
-        box_col = 3;
+        sudoku.box_col = 3;
+        sudoku.box_row = 3;
     }
-    else if (SIZE == 6)
+    else if (sudoku.SIZE == 6)       // 6x6 Sudoku with 2x3 boxes
     {
-        row = 6;
-        col = 6;
-        box_row = 2;
-        box_col = 3;
+        sudoku.row = 6;
+        sudoku.col = 6;
+        sudoku.box_row = 2;
+        sudoku.box_col = 3;
     }
     else {
         printf("Invalid size. Please enter 6 or 9.\n");
@@ -44,13 +48,13 @@ void SizeofBox()                // Function to determine the size of the Sudoku 
 
 bool isValidValue(int value)                          // Function to check if the input value is valid
 {
-    return value >= 0 && value <= SIZE;
+    return value >= 0 && value <= sudoku.SIZE;
 }
 
 int checkValidValue(int value)                     // Function to check if the input value is valid
 {    
     if (!isValidValue(value)) {
-        printf("Invalid value. Use numbers from 0 to %d.\n", SIZE);
+        printf("Invalid value. Use numbers from 0 to %d.\n", sudoku.SIZE);
         printf("\n");
         return 0;
     }
@@ -59,17 +63,17 @@ int checkValidValue(int value)                     // Function to check if the i
 
 bool validatePuzzle()
 {
-    for (int r = 0; r < row; r++) {
-        for (int c = 0; c < col; c++) {
-            int num = sudoku[r][c];
+    for (int r = 0; r < sudoku.row; r++) {
+        for (int c = 0; c < sudoku.col; c++) {
+            int num = sudoku.Sudoku[r][c];
             if (num != EMPTY) {
-                sudoku[r][c] = EMPTY; // Temporarily remove the number to check for validity
+                sudoku.Sudoku[r][c] = EMPTY; // Temporarily remove the number to check for validity
                 if (!isSafe(r, c, num)) {
                     printf("Invalid puzzle. The number %d at position (%d, %d) violates Sudoku rules.\n", num, r + 1, c + 1);
                     resetGrid();
                     return false;
                 }
-                sudoku[r][c] = num; // Restore the number
+                sudoku.Sudoku[r][c] = num; // Restore the number
             }
         }
     }
@@ -78,32 +82,32 @@ bool validatePuzzle()
 
 void printline()                                // Function to print the separator line 
 {
-    if (SIZE == 9)
+    if (sudoku.SIZE == 9)
         printf("+-------+-------+-------+\n");
-    else if (SIZE == 6)
+    else if (sudoku.SIZE == 6)
         printf("+-------+-------+\n");
 }
 
 void printSeparator()                          // Function to print the Sudoku grid
 {
     printline();
-    for (int r = 0; r < row; r++) 
+    for (int r = 0; r < sudoku.row; r++) 
     {
         printf("|");
-        for (int c = 0; c < col; c++) 
+        for (int c = 0; c < sudoku.col; c++) 
         {
-            if (sudoku[r][c] == EMPTY) {
+            if (sudoku.Sudoku[r][c] == EMPTY) {
                 printf(" .");
             } 
             else {
-                printf(" %d", sudoku[r][c]);
+                printf(" %d", sudoku.Sudoku[r][c]);
             }
-            if ((c + 1) % box_col == 0)
+            if ((c + 1) % sudoku.box_col == 0)
                 printf(" |");
         }
             printf("\n");
 
-        if ((r + 1) % box_row == 0)
+        if ((r + 1) % sudoku.box_row == 0)
             printline();
     }
 } 
@@ -117,9 +121,9 @@ void input_sudoku()                                    // Function to input the 
     printf("Use 0 for empty cells.\n");
     printSeparator();
     int temp;
-    for (int r = 0; r < row; r++) {
+    for (int r = 0; r < sudoku.row; r++) {
         printf("Row : %d \n", r + 1);
-        for (int c = 0; c < col; c++) {
+        for (int c = 0; c < sudoku.col; c++) {
             while (1) {
                 printf("Enter the value of sudoku[%d]: ", c + 1);
                 if (scanf("%d", &temp) != 1) {
@@ -130,7 +134,7 @@ void input_sudoku()                                    // Function to input the 
                 if (!checkValidValue(temp)) {
                     continue;
                 }
-                sudoku[r][c] = temp;
+                sudoku.Sudoku[r][c] = temp;
                 break;
             }
         }
@@ -143,21 +147,21 @@ void input_sudoku()                                    // Function to input the 
 int isSafe(int row, int col, int num)               // Check if it's safe to place a number in the given cell
 {
     // Row check
-    for (int x = 0; x < SIZE; x++)
-        if (sudoku[row][x] == num)
+    for (int x = 0; x < sudoku.SIZE; x++)
+        if (sudoku.Sudoku[row][x] == num)
             return false;
     
     // Column check
-    for (int x = 0; x < SIZE; x++)
-        if (sudoku[x][col] == num)
+    for (int x = 0; x < sudoku.SIZE; x++)
+        if (sudoku.Sudoku[x][col] == num)
             return false;
 
     // Box check
-    int startRow = row - row % box_row;
-    int startCol = col - col % box_col;
-    for (int r = 0; r < box_row; r++)
-        for (int c = 0; c < box_col; c++)
-            if (sudoku[r + startRow][c + startCol] == num)
+    int startRow = row - row % sudoku.box_row;
+    int startCol = col - col % sudoku.box_col;
+    for (int r = 0; r < sudoku.box_row; r++)
+        for (int c = 0; c < sudoku.box_col; c++)
+            if (sudoku.Sudoku[r + startRow][c + startCol] == num)
                 return false;
 
     return true;
@@ -167,9 +171,9 @@ int SudokuSolver()                                   // Backtracking algorithm t
 {
     int row, col;
     bool isEmpty = false;
-    for (row = 0; row < SIZE; row++) {
-        for (col = 0; col < SIZE; col++) {
-            if (sudoku[row][col] == EMPTY) {
+    for (row = 0; row < sudoku.SIZE; row++) {
+        for (col = 0; col < sudoku.SIZE; col++) {
+            if (sudoku.Sudoku[row][col] == EMPTY) {
                 isEmpty = true;
                 break;
             }
@@ -184,16 +188,16 @@ int SudokuSolver()                                   // Backtracking algorithm t
         return true;
     }
 
-    for (int num = 1; num <= SIZE; num++) {
+    for (int num = 1; num <= sudoku.SIZE; num++) {
         if (isSafe(row, col, num)) {
-            sudoku[row][col] = num;
+            sudoku.Sudoku[row][col] = num;
 
             if (SudokuSolver()) {
                 return true;
             }
 
-            sudoku[row][col] = EMPTY; // Backtrack
-            backtrackingsteps++;
+            sudoku.Sudoku[row][col] = EMPTY; // Backtrack
+            sudoku.backtrackingSteps++;
         }
     }
 
@@ -204,7 +208,7 @@ int SudokuSolver()                                   // Backtracking algorithm t
 void resetGrid() {                                  // Reset the Sudoku grid to empty
     for (int r = 0; r < MAX_SIZE; r++) {
         for (int c = 0; c < MAX_SIZE; c++) {
-            sudoku[r][c] = EMPTY;
+            sudoku.Sudoku[r][c] = EMPTY;
         }
     }
 }
@@ -213,7 +217,7 @@ void resetGrid() {                                  // Reset the Sudoku grid to 
 
 void loadTestPuzzle(int num) 
 {                           // Function to test the Sudoku solver with a predefined puzzle
-    int temp = (SIZE == 6) ? 0 : 1; // Determine index for 6x6 or 9x9 puzzles
+    int temp = (sudoku.SIZE == 6) ? 0 : 1; // Determine index for 6x6 or 9x9 puzzles
     int testPuzzle[2][3][9][9] = {
         {
             {
@@ -286,12 +290,19 @@ void loadTestPuzzle(int num)
     // Copy the selected puzzle to the global sudoku grid
     for (int r = 0; r < 9; r++) {
         for (int c = 0; c < 9; c++) {
-            sudoku[r][c] = testPuzzle[temp][num][r][c];
+            sudoku.Sudoku[r][c] = testPuzzle[temp][num][r][c];
         }
     }
 }
 
-
+void printlines(int num)
+{
+    printf("\n");
+    for (int j = 0; j < num; j++) {
+        printf("-");
+    }
+    printf("\n");
+}
 enum MenuOption
 {
     INPUT_SUDOKU = 1,
@@ -308,7 +319,7 @@ int main()                                        // Main function to run the Su
     int choice;
 
     while (1) {
-        printf("\n===== SUDOKU SOLVER =====\n");
+        printf("\n===== SUDOKU SOLVER =====\n\n");
         printf("1. Enter Sudoku Puzzle\n");
         printf("2. Display Sudoku\n");
         printf("3. Solve Sudoku\n");
@@ -330,13 +341,22 @@ int main()                                        // Main function to run the Su
         switch (choice) 
         {
             case INPUT_SUDOKU:
+                if (sudoku.puzzleLoaded == true) {
+                    printf("A puzzle is already loaded. Do you want to overwrite it? (y/n): ");
+                    char confirm;
+                    scanf(" %c", &confirm);
+                    if (confirm != 'y' && confirm != 'Y') {
+                        printf("Overwriting cancelled.\n");
+                        break;
+                    }
+                }
                 printf("\n\nInput Sudoku Puzzle:\n");
                 input_sudoku();
-                puzzleLoaded = true;
+                sudoku.puzzleLoaded = true;
                 break;
 
             case DISPLAY_SUDOKU:
-                if (puzzleLoaded == false) {
+                if (sudoku.puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
                 }
                 else {
@@ -347,11 +367,17 @@ int main()                                        // Main function to run the Su
 
             case SOLVE_SUDOKU:
 
-                if (puzzleLoaded == false) {
+                if(!validatePuzzle()) {
+                    sudoku.puzzleLoaded = false;
+                    sudoku.puzzleSolved = false;
+                    break;
+                }
+
+                if (sudoku.puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
                     break;
                 }
-                if (puzzleSolved==true) {
+                if (sudoku.puzzleSolved==true) {
                     printSeparator();
                     printf("The Sudoku puzzle is already solved.\n");
                     break;
@@ -359,16 +385,16 @@ int main()                                        // Main function to run the Su
 
                 if (SudokuSolver() == true) {
                     printf("\nSudoku solved successfully:\n");
-                    printf("Backtracking steps taken: %ld\n", backtrackingsteps);
+                    printf("Backtracking steps taken: %d\n", sudoku.backtrackingSteps);
                     printSeparator();
-                    puzzleSolved = true;
+                    sudoku.puzzleSolved = true;
                 } else {
                     printf("\nNo solution exists for the given Sudoku.\n");
                 }
                 break;
 
             case TEST_PUZZLES:
-                if (puzzleLoaded == true) {
+                if (sudoku.puzzleLoaded == true) {
                     printf("Are you sure you want to load a test puzzle? This will overwrite the current grid. (y/n): ");
                     char confirm;
                     scanf(" %c", &confirm);
@@ -378,16 +404,17 @@ int main()                                        // Main function to run the Su
                     }
                 }
 
-                if (puzzleLoaded == true) {
+                if (sudoku.puzzleLoaded == true) {
                     printf("Resetting the current grid before loading a test puzzle...\n");
                     resetGrid();
-                    puzzleLoaded = false;
-                    puzzleSolved = false;
-                    backtrackingsteps = 0;
+                    sudoku.puzzleLoaded = false;
+                    sudoku.puzzleSolved = false;
+                    sudoku.backtrackingSteps = 0;
                 }
                 SizeofBox();
                 while (1)
                 {
+                    printlines(50);
                     printf("\nSelect a test puzzle:\n");
                     printf("1. Easy Puzzle\n");
                     printf("2. Medium Puzzle\n");
@@ -407,18 +434,18 @@ int main()                                        // Main function to run the Su
                     loadTestPuzzle(puzzleChoice - 1);
                     printSeparator();
                     printf("Test puzzle loaded successfully.\n");
-                    puzzleLoaded = true;
+                    sudoku.puzzleLoaded = true;
                     break;
                 }
                 break;
             
             case RESET_GRID:
-                if (puzzleLoaded == false) {
+                if (sudoku.puzzleLoaded == false) {
                     printf("The Sudoku grid is already empty.\n");
                     break;
                 }
                 else {
-                    if (puzzleLoaded == true) {
+                    if (sudoku.puzzleLoaded == true) {
                          printf("Are you sure you want to reset the grid? (y/n): ");
                          char confirm;
                          scanf(" %c", &confirm);
@@ -429,9 +456,9 @@ int main()                                        // Main function to run the Su
                     }
                     printf("Resetting the Sudoku grid...\n");
                     resetGrid();
-                    puzzleLoaded = false;
-                    puzzleSolved = false;
-                    backtrackingsteps = 0;
+                    sudoku.puzzleLoaded = false;
+                    sudoku.puzzleSolved = false;
+                    sudoku.backtrackingSteps = 0;
                 }
                 break;
     
@@ -442,6 +469,8 @@ int main()                                        // Main function to run the Su
                 printf("Invalid choice. Please try again.\n");
                 continue;
         }
+        printlines(90);
+
     }
     getche();
 }

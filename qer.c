@@ -11,6 +11,6 @@ int main()
     } else {
         printf("The number is odd.\n");
     }
-    printf("\033[33mSolved!\033]");
+    printf("\033[33mSolved!\033[0m\n");
     getche();
 }
