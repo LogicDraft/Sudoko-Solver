@@ -217,7 +217,7 @@ void resetGrid() {                                  // Reset the Sudoku grid to 
 
 void loadTestPuzzle(int num) 
 {                           // Function to test the Sudoku solver with a predefined puzzle
-    int temp = (sudoku.SIZE == 6) ? 0 : 1; // Determine index for 6x6 or 9x9 puzzles
+    int temp = (sudoku.SIZE == 9) ? 0 : 1; // Determine which set of puzzles to use based on the grid size
     int testPuzzle[2][3][9][9] = {
         {
             {
