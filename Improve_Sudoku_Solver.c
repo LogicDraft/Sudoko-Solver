@@ -57,6 +57,25 @@ int checkValidValue(int value)                     // Function to check if the i
     return 1;
 }
 
+bool validatePuzzle()
+{
+    for (int r = 0; r < row; r++) {
+        for (int c = 0; c < col; c++) {
+            int num = sudoku[r][c];
+            if (num != EMPTY) {
+                sudoku[r][c] = EMPTY; // Temporarily remove the number to check for validity
+                if (!isSafe(r, c, num)) {
+                    printf("Invalid puzzle. The number %d at position (%d, %d) violates Sudoku rules.\n", num, r + 1, c + 1);
+                    resetGrid();
+                    return false;
+                }
+                sudoku[r][c] = num; // Restore the number
+            }
+        }
+    }
+    return true;
+}
+
 void printline()                                // Function to print the separator line 
 {
     if (SIZE == 9)
