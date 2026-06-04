@@ -272,6 +272,18 @@ void loadTestPuzzle(int num)
     }
 }
 
+
+enum MenuOption
+{
+    INPUT_SUDOKU = 1,
+    DISPLAY_SUDOKU,
+    SOLVE_SUDOKU,
+    TEST_PUZZLES,
+    RESET_GRID,
+    EXIT
+};
+
+
 int main()                                        // Main function to run the Sudoku solver
 {
     int choice;
@@ -298,13 +310,13 @@ int main()                                        // Main function to run the Su
 
         switch (choice) 
         {
-            case 1:
+            case INPUT_SUDOKU:
                 printf("\n\nInput Sudoku Puzzle:\n");
                 input_sudoku();
                 puzzleLoaded = true;
                 break;
 
-            case 2:
+            case DISPLAY_SUDOKU:
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
                 }
@@ -314,7 +326,7 @@ int main()                                        // Main function to run the Su
                 }
                 break;
 
-            case 3:
+            case SOLVE_SUDOKU:
 
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is empty. Please enter a puzzle first.\n");
@@ -336,7 +348,7 @@ int main()                                        // Main function to run the Su
                 }
                 break;
 
-            case 4:
+            case TEST_PUZZLES:
                 if (puzzleLoaded == true) {
                     printf("Are you sure you want to load a test puzzle? This will overwrite the current grid. (y/n): ");
                     char confirm;
@@ -381,7 +393,7 @@ int main()                                        // Main function to run the Su
                 }
                 break;
             
-            case 5:
+            case RESET_GRID:
                 if (puzzleLoaded == false) {
                     printf("The Sudoku grid is already empty.\n");
                     break;
@@ -404,7 +416,7 @@ int main()                                        // Main function to run the Su
                 }
                 break;
     
-            case 6:
+            case EXIT:
                 exit(0);
 
             default:
