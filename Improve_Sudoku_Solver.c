@@ -346,7 +346,7 @@ int main()                                        // Main function to run the Su
                     char confirm;
                     scanf(" %c", &confirm);
                     if (confirm != 'y' && confirm != 'Y') {
-                        restetGrid();
+                        resetGrid();
                         sudoku.puzzleLoaded = false;
                         printf("\033[31mOverwriting cancelled.\033[0m\n");
                         break;
