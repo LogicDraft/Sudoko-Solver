@@ -309,7 +309,7 @@ void progressBar()          // Function to display a progress bar while solving 
 {
     printf("\nSolving Sudoku...\n[");
 
-    for(int i = 0; i <= 10; i++)
+    for(int i = 0; i <= 20; i++)
     {
         printf("\033[31m#\033[0m");
         Sleep(100);
@@ -367,6 +367,7 @@ int main()                                        // Main function to run the Su
         }
         if (choice < 1 || choice > 6) {
             printf("\033[31mInvalid choice. Please enter a number between 1 and 6.\033[0m\n");
+            printlines(90);
             continue;
         }
 
