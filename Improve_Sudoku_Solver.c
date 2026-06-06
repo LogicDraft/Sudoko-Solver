@@ -21,6 +21,9 @@ struct
     int backtrackingSteps;
 } sudoku = {MAX_SIZE, MAX_SIZE, 0, 0, 0, {{0}}, false, false, 0};
 
+int isSafe(int row, int col, int num);
+void resetGrid(void);
+
 void SizeofBox()        // Function to determine the size of the Sudoku grid and box dimensions based on user input
 {
     while (1)
