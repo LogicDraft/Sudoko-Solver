@@ -18,5 +18,18 @@ int main()
     // yellow color code: \033[33m
     // reset color code: \033[0m
     // other colors: https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+
+    // Prevoius Method of loading test puzzles
+    for(int i = 0; i < 9; i++)
+    {
+    for(int j = 0; j < 9; j++)
+    {
+        sudoku.Sudoku[i][j] = testPuzzle[temp][num][i][j];
+    }
+    }
+
+    // New Method of loading test puzzles using memcpy
+    memcpy(sudoku.Sudoku, testPuzzle[temp][num], sizeof(sudoku.Sudoku));
+
     getche();
 }
