@@ -127,28 +127,36 @@ void printSeparator()                          // Function to print the Sudoku g
 void input_sudoku()                                    // Function to input the Sudoku puzzle from the user
 {
     SizeofBox();
-    printf("\033[92mEnter the Sudoku values directly into the grid below.\033[0m\n");
+    printf("\033[92mEnter the Sudoku values row by row (space-separated).\033[0m\n");
     printf("\033[92mUse 0 for empty cells.\033[0m\n");
     printSeparator();
     int temp;
     for (int r = 0; r < sudoku.row; r++) {
-        printf("\033[91mRow : %d \033[0m\n", r + 1);
-        for (int c = 0; c < sudoku.col; c++) {
-            while (1) {
-                printf("\033[92mEnter the value of sudoku[%d]: \033[0m", c + 1);
+        while (1) {
+            printf("\033[91mRow %d (Enter %d values): \033[0m", r + 1, sudoku.col);
+            int valid = 1;
+            int tempRow[MAX_SIZE];
+            for (int c = 0; c < sudoku.col; c++) {
                 if (scanf("%d", &temp) != 1) {
-                    printf("\033[31mInvalid input. Please enter a number.\033[0m\n\n");
-                    while (getchar() != '\n');
-                    continue;
+                    valid = 0;
+                    break;
                 }
                 if (!checkValidValue(temp)) {
-                    continue;
+                    valid = 0;
+                    break;
                 }
-                sudoku.Sudoku[r][c] = temp;
-                break;
+                tempRow[c] = temp;
             }
+            if (!valid) {
+                printf("\033[31mInvalid input for row. Please re-enter the entire row.\033[0m\n\n");
+                while (getchar() != '\n'); // Clear input buffer
+                continue;
+            }
+            for (int c = 0; c < sudoku.col; c++) {
+                sudoku.Sudoku[r][c] = tempRow[c];
+            }
+            break;
         }
-        printf("\n");
     }
 }
 
