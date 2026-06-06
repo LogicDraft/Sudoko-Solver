@@ -226,14 +226,9 @@ int SudokuSolver()                                   // Backtracking algorithm t
 }
 
 
-void resetGrid() {                                  // Reset the Sudoku grid to empty
-    for (int r = 0; r < MAX_SIZE; r++) {
-        for (int c = 0; c < MAX_SIZE; c++) {
-            sudoku.Sudoku[r][c] = EMPTY;
-        }
-    }
+void resetGrid(void) {                                  // Reset the Sudoku grid to empty
+    memset(sudoku.Sudoku, 0, sizeof(sudoku.Sudoku));
 }
-
 
 
 void loadTestPuzzle(int num) 
@@ -252,11 +247,7 @@ void loadTestPuzzle(int num)
         }
     };
     // Copy the selected puzzle to the global sudoku grid
-    for (int r = 0; r < 9; r++) {
-        for (int c = 0; c < 9; c++) {
-            sudoku.Sudoku[r][c] = testPuzzle[temp][num][r][c];
-        }
-    }
+    memcpy(sudoku.Sudoku, testPuzzle[temp][num], sizeof(sudoku.Sudoku));
 }
 
 void progressBar()          // Function to display a progress bar while solving the Sudoku puzzle
