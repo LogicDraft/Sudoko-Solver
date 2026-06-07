@@ -8,7 +8,7 @@
 #define MAX_SIZE 9
 #define EMPTY 0
 
-struct
+struct                          // Structure to hold the Sudoku grid 
 {
     int row;
     int col;
@@ -20,6 +20,7 @@ struct
     bool puzzleSolved;
     int backtrackingSteps;
 } sudoku = {MAX_SIZE, MAX_SIZE, 0, 0, 0, {{0}}, false, false, 0};
+
 
 int isSafe(int row, int col, int num);
 void resetGrid(void);
