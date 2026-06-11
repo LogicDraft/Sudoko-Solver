@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include<conio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<windows.h>
@@ -456,5 +455,5 @@ int main()                                        // Main function to run the Su
         printlines(90);
 
     }
-    getche();
+    return 0;
 }
