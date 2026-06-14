@@ -126,7 +126,6 @@ void printSeparator()                          // Function to print the Sudoku g
 } 
 
 
-
 void input_sudoku()                                    // Function to input the Sudoku puzzle from the user
 {
     SizeofBox();
